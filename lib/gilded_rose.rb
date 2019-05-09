@@ -7,7 +7,8 @@ class GildedRose
 
   def update_quality
     @items.each do |item|
-      if (item.name != 'Aged Brie') && (item.name != 'Backstage passes to a TAFKAL80ETC concert')
+
+      if !item.name.include?('Aged Brie') && !item.name.include?('Backstage passes to a TAFKAL80ETC concert')
         decrease_quality(item)
       else
         increase_quality(item)
@@ -16,20 +17,8 @@ class GildedRose
 
       decrease_sell_in(item)
 
-      if item.sell_in < 0
-
-        if item.name != 'Aged Brie'
-
-          if item.name != 'Backstage passes to a TAFKAL80ETC concert'
-            decrease_quality(item)
-          else
-            item.quality -= item.quality
-          end
-
-        else
-          increase_quality(item)
-        end
-
+      if item.sell_in.negative?
+        !item.name.include?('Aged Brie') ? decrease_quality(item) : increase_quality(item)
       end
     end
   end
@@ -37,8 +26,9 @@ class GildedRose
   private
 
   def decrease_quality(item)
-    if (item.quality > 0) && (item.name != 'Sulfuras, Hand of Ragnaros')
-      item.quality -= 1
+    if item.quality.positive?
+      item.quality -= 1 unless item.name.include?('Sulfuras, Hand of Ragnaros')
+      item.quality = 0 if item.name.include?('Backstage passes to a TAFKAL80ETC concert')
     end
   end
 
@@ -47,11 +37,11 @@ class GildedRose
   end
 
   def decrease_sell_in(item)
-    item.sell_in -= 1 unless item.name == 'Sulfuras, Hand of Ragnaros'
+    item.sell_in -= 1 unless item.name.include?('Sulfuras, Hand of Ragnaros')
   end
 
   def update_backstage_passes(item)
-    if item.name == 'Backstage passes to a TAFKAL80ETC concert'
+    if item.name.include?('Backstage passes to a TAFKAL80ETC concert')
       increase_quality(item) if item.sell_in < 11
       increase_quality(item) if item.sell_in < 6
     end
