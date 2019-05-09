@@ -18,8 +18,14 @@ describe GildedRose do
         expect(items[0].quality).to eq 8
       end
 
+      it 'degrades the quality normally unless the date has passed' do
+        items = [Item.new('foo', 10, 10)]
+        GildedRose.new(items).update_quality
+        expect(items[0].quality).to eq 9
+      end
+
       it 'cannot change the quality to less than 0' do
-        items = [Item.new('foo', 0, 0)]
+        items = [Item.new('foo', 5, 0)]
         GildedRose.new(items).update_quality
         expect(items[0].quality).not_to eq -1
       end
@@ -37,10 +43,16 @@ describe GildedRose do
         GildedRose.new(items).update_quality
         expect(items[0].quality).to eq 3
       end
+
+      it 'does not change the sell in day count of a Sulfuras product' do
+        items = [Item.new('Sulfuras, Hand of Ragnaros', 3, 3)]
+        GildedRose.new(items).update_quality
+        expect(items[0].sell_in).to eq 3
+      end
     end
 
     describe '#update_quality for Aged Brie' do
-      it 'increases the Quality of Aged Brie the older it gets' do
+      it 'increases the Quality of Aged Brie twice as much if sell in day is 0' do
         items = [Item.new('Aged Brie', 0, 3)]
         GildedRose.new(items).update_quality
         expect(items[0].quality).to eq 5
