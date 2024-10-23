@@ -31,8 +31,8 @@ executable:${TEXTTEST_HOME}/Kotlin/texttest_rig.py
 interpreter:python
 
 # Settings for the Ruby version
-executable:${TEXTTEST_HOME}/ruby/texttest_fixture.rb
-interpreter:ruby
+#executable:${TEXTTEST_HOME}/ruby/texttest_fixture.rb
+#interpreter:ruby
 
 # Settings for the C# Core version
 #executable:${TEXTTEST_HOME}/csharpcore/GildedRoseTests/bin/Debug/net8.0/GildedRoseTests
